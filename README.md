@@ -4,7 +4,7 @@ A reproducible way to set up SSH-based GitHub access on an Ubuntu machine or ser
 
 After completing this setup, you will be able to clone repositories, commit changes, and push code to GitHub without passwords or access tokens.
 
----
+
 
 ## What this setup does
 
