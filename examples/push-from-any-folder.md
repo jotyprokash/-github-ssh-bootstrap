@@ -3,8 +3,7 @@
 
 ## 📄 `examples/push-from-any-folder.md`
 
-```md
-# Push From Any Folder
+
 
 
 cd /any/folder
