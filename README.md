@@ -1,43 +1,63 @@
 # GitHub SSH Bootstrap for Ubuntu
 
-This repository sets up SSH-based access to GitHub on an Ubuntu machine.
 
-After completing the setup, you can clone repositories, pull changes, and push code without being asked for passwords or access tokens. You authenticate once, and GitHub trusts your machine from then on.
+This repository provides a strict, copy-pasteable process to configure SSH-based GitHub access on an Ubuntu machine or server.
 
-## Why this repository exists
 
-GitHub authentication can become repetitive and noisy, especially on new machines. SSH solves this by providing a secure and long-lived way to authenticate.
+Follow the steps below exactly and in order.
 
-This repository packages that setup into a small, repeatable process.
 
-## How to use this repository
+## Step 1: Install Git
 
-On a new machine, start by cloning this repository using HTTPS. This is important because SSH is not configured yet.
 
-Move into the cloned directory and run the setup script. The script will guide you through the process and print your public SSH key.
+```bash
+sudo apt update
+sudo apt install -y git
+Step 2: Clone this repository using HTTPS
 
-Add that key to your GitHub account under SSH and GPG keys. Once the key is added, return to the terminal and let the script verify the connection.
+SSH is not configured yet, so HTTPS must be used for the initial clone.
 
-This setup only needs to be done once per machine.
+git clone https://github.com/jotyprokash/github-ssh-bootstrap.git
+cd github-ssh-bootstrap
+Step 3: Make the setup script executable
+chmod +x scripts/setup-github-ssh.sh
+Step 4: Run the SSH setup script
 
-## After the setup
+Use the same email address associated with your GitHub account.
 
-Once SSH is configured, use Git normally.
+./scripts/setup-github-ssh.sh your-email@example.com
 
-Clone repositories using SSH, make your changes, commit, and push. GitHub will not ask you to authenticate again. This works from any folder and inside VS Code.
+The script will generate an SSH key if one does not exist, start the SSH agent, add the key, and print the public key.
 
-If an SSH key already exists on the machine, the script will reuse it safely.
+Step 5: Add the SSH key to GitHub
 
-## What is included here
+Copy the printed public key and add it in GitHub:
 
-This repository contains a setup script, short documentation explaining how SSH authentication works, and simple examples for common Git workflows.
+Settings → SSH and GPG keys → New SSH key
 
-Everything is intentionally minimal and easy to read.
+After adding the key, return to the terminal and press Enter.
 
-## Who this is for
+Step 6: Confirm GitHub host authenticity
 
-This is for developers and DevOps engineers who want a clean and predictable GitHub setup on Ubuntu, either for personal use or when onboarding new machines.
+On first connection, you may see this prompt:
 
-## Final note
+Are you sure you want to continue connecting (yes/no)?
 
-Good tooling should be quiet. This repository is meant to be run once and then forgotten.
+Type yes and press Enter. This happens once per machine.
+
+Step 7: Verify SSH authentication
+ssh -T git@github.com
+
+Expected output:
+
+Hi <your-username>! You've successfully authenticated, but GitHub does not provide shell access.
+Step 8: Configure Git identity (required on servers)
+
+Git cannot create commits until a user identity is configured. Run these commands once per machine.
+
+git config --global user.name "Your Name"
+git config --global user.email "your-email@example.com"
+
+Verify:
+
+git config --global --list
